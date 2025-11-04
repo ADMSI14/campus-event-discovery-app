@@ -1,11 +1,12 @@
 API Documentation:
 
 Get Schools:
-
+```
   https://api.haulradar.com/v1/blog/schools/
-
+```
   Example Output:
-
+  
+```json
   {
 	"data": [
   		{
@@ -18,13 +19,15 @@ Get Schools:
   		}
 	  ]
   }
+```
 
 Get Events by School:
-
+```
   https://api.haulradar.com/v1/blog/events/school/<School ID>
-
+```
   Example Output:
 
+```json
   {
 	"data": [
   		{
@@ -39,13 +42,15 @@ Get Events by School:
   		}
   	]
   }
+```
 
 Get Event:
-
+```
   https://api.haulradar.com/v1/blog/events/<Event ID>
-
+```
   Example Output:
 
+```json
   {
 	"data": {
   		"id": "1cf3dcd5-0d20-41a5-87f4-00ac2bce236e",
@@ -58,6 +63,7 @@ Get Event:
   		"location": "SRID=4326;POINT (-66.46689684501543 45.848150283597036)"
   	}
   }
+```
 
 
 
