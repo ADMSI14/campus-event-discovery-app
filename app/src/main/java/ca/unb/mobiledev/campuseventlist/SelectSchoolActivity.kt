@@ -30,9 +30,13 @@ class SelectSchoolActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_school)
 
+        Log.d("SelectSchool", "onCreate started")
+
         // Initialize views
         schoolListView = findViewById(R.id.schoolListView)
         searchEditText = findViewById(R.id.searchEditText)
+
+        Log.d("SelectSchool", "Views initialized")
 
         // Setup ListView adapter
         adapter = ArrayAdapter(
@@ -42,9 +46,12 @@ class SelectSchoolActivity : AppCompatActivity() {
         )
         schoolListView.adapter = adapter
 
+        Log.d("SelectSchool", "Adapter set to ListView")
+
         // Handle school selection from list
         schoolListView.setOnItemClickListener { _, _, position, _ ->
             val selectedSchool = adapter.getItem(position)
+            Log.d("SelectSchool", "Item clicked: $selectedSchool")
             selectedSchool?.let { validateAndNavigate(it) }
         }
 
@@ -63,11 +70,12 @@ class SelectSchoolActivity : AppCompatActivity() {
         searchEditText.setOnEditorActionListener { _, _, _ ->
             val searchedSchool = searchEditText.text.toString().trim()
             if (searchedSchool.isNotEmpty()) {
+                Log.d("SelectSchool", "Search submitted: $searchedSchool")
                 validateAndNavigate(searchedSchool)
             }
             true
         }
-
+        
         // Fetch schools from API
         fetchSchools()
     }
@@ -87,18 +95,30 @@ class SelectSchoolActivity : AppCompatActivity() {
                         allSchools.clear()
                         allSchools.addAll(schoolResponse.data)
                         
+                        Log.d("SelectSchool", "School names before: $schoolNames")
+                        
+                        // Update the school names list
                         schoolNames.clear()
                         schoolNames.addAll(allSchools.map { it.name })
                         
-                        Log.d("SelectSchool", "School names: $schoolNames")
+                        Log.d("SelectSchool", "School names after: $schoolNames")
+                        Log.d("SelectSchool", "Adapter count: ${adapter.count}")
                         
-                        adapter.notifyDataSetChanged()
-                        
-                        Toast.makeText(
-                            this@SelectSchoolActivity,
-                            "Loaded ${schoolNames.size} schools",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // Notify adapter on UI thread
+                        runOnUiThread {
+                            try {
+                                adapter.notifyDataSetChanged()
+                                Log.d("SelectSchool", "Adapter notified. New count: ${adapter.count}")
+                                
+                                Toast.makeText(
+                                    this@SelectSchoolActivity,
+                                    "Loaded ${schoolNames.size} school(s)",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                Log.e("SelectSchool", "Error updating adapter", e)
+                            }
+                        }
                     } ?: run {
                         Log.e("SelectSchool", "Response body is null")
                         Toast.makeText(
