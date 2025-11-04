@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Red Circle Background -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#F44336" />
+            <size
+                android:width="100dp"
+                android:height="100dp" />
+        </shape>
+    </item>
+    
+    <!-- White Exclamation Mark -->
+    <item
+        android:drawable="@android:drawable/stat_notify_error"
+        android:gravity="center" />
+</layer-list>
+

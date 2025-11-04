@@ -2,4 +2,13 @@
     <string name="app_name">Campus Event List</string>
     <string name="splash_title">Uni-T</string>
     <string name="splash_slogan">Powered by UniTech</string>
+    
+    <!-- Error Screen Strings -->
+    <string name="error_title">Error !</string>
+    <string name="error_icon_desc">Error icon</string>
+    <string name="selected_school_text">your selected school:</string>
+    <string name="not_enrolled_text">Has not yet enrolled with Uni-T</string>
+    <string name="error_explanation">Click below to send an automatic email to your schools administration, requesting them to join Uni-T !</string>
+    <string name="send_request_button">Send Request for Enrolment</string>
+    <string name="return_to_selection">Return to the School Selection Screen</string>
 </resources>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- Error Icon (Red Circle with Exclamation Mark) -->
+        <ImageView
+            android:id="@+id/errorIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80dp"
+            android:src="@drawable/error_icon"
+            android:contentDescription="@string/error_icon_desc" />
+
+        <!-- Error Text -->
+        <TextView
+            android:id="@+id/errorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/errorIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/error_title"
+            android:textSize="36sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <!-- "your selected school:" text -->
+        <TextView
+            android:id="@+id/selectedSchoolText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/errorText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:text="@string/selected_school_text"
+            android:textSize="20sp"
+            android:textColor="@android:color/black" />
+
+        <!-- School Name Label -->
+        <TextView
+            android:id="@+id/schoolNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/selectedSchoolText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/school_name_label_background"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="12dp"
+            android:text="School Name"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+        <!-- "Has not yet enrolled with Uni-T" text -->
+        <TextView
+            android:id="@+id/notEnrolledText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/schoolNameLabel"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/not_enrolled_text"
+            android:textSize="20sp"
+            android:textColor="@android:color/black" />
+
+        <!-- Explanation Text -->
+        <TextView
+            android:id="@+id/explanationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notEnrolledText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginHorizontal="20dp"
+            android:text="@string/error_explanation"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:textAlignment="center"
+            android:gravity="center" />
+
+        <!-- Send Request Button -->
+        <Button
+            android:id="@+id/sendRequestButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/explanationText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/send_request_button_background"
+            android:text="@string/send_request_button"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="12dp" />
+
+        <!-- Return to School Selection -->
+        <TextView
+            android:id="@+id/returnButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sendRequestButton"
+            android:layout_marginTop="40dp"
+            android:drawableStart="@android:drawable/ic_menu_revert"
+            android:drawablePadding="8dp"
+            android:text="@string/return_to_selection"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </RelativeLayout>
+</ScrollView>
+
