@@ -84,6 +84,10 @@ class SelectSchoolActivity : AppCompatActivity() {
         super.onResume()
         Log.d("SelectSchool", "onResume called. Current schools count: ${schoolNames.size}")
         
+        // Clear the search bar when returning from ErrorActivity
+        searchEditText.setText("")
+        Log.d("SelectSchool", "Search bar cleared")
+        
         // Refresh the adapter when returning from ErrorActivity
         if (schoolNames.isNotEmpty()) {
             Log.d("SelectSchool", "Refreshing adapter with existing data")
