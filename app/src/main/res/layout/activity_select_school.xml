@@ -113,12 +113,16 @@
 
         <ImageView
             android:id="@+id/searchIcon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@android:drawable/ic_menu_search"
             android:contentDescription="@string/search_icon_desc"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
             app:tint="#000000" />
     </RelativeLayout>
 

@@ -23,6 +23,7 @@ class SelectSchoolActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var loadingContainer: android.view.View
+    private lateinit var searchIcon: android.widget.ImageView
     
     private val allSchools = mutableListOf<School>()
     private val schoolNames = mutableListOf<String>()
@@ -39,6 +40,7 @@ class SelectSchoolActivity : AppCompatActivity() {
         schoolListView = findViewById(R.id.schoolListView)
         searchEditText = findViewById(R.id.searchEditText)
         loadingContainer = findViewById(R.id.loadingContainer)
+        searchIcon = findViewById(R.id.searchIcon)
 
         Log.d("SelectSchool", "Views initialized")
 
@@ -74,18 +76,32 @@ class SelectSchoolActivity : AppCompatActivity() {
 
         // Handle search action (when user presses enter/search on keyboard)
         searchEditText.setOnEditorActionListener { _, _, _ ->
-            val searchedSchool = searchEditText.text.toString().trim()
-            if (searchedSchool.isNotEmpty()) {
-                Log.d("SelectSchool", "Search submitted: $searchedSchool")
-                validateAndNavigate(searchedSchool)
-            }
+            performSearch()
             true
+        }
+        
+        // Handle search icon click
+        searchIcon.setOnClickListener {
+            Log.d("SelectSchool", "Search icon clicked")
+            performSearch()
         }
         
         // Show loading, disable search, and fetch schools
         showLoading()
         searchEditText.isEnabled = false
+        searchIcon.isEnabled = false
         fetchSchools()
+    }
+    
+    // Perform search validation and navigation
+    private fun performSearch() {
+        val searchedSchool = searchEditText.text.toString().trim()
+        if (searchedSchool.isNotEmpty()) {
+            Log.d("SelectSchool", "Search submitted: $searchedSchool")
+            validateAndNavigate(searchedSchool)
+        } else {
+            Toast.makeText(this, "Please enter a school name", Toast.LENGTH_SHORT).show()
+        }
     }
     
     private fun showLoading() {
@@ -98,6 +114,7 @@ class SelectSchoolActivity : AppCompatActivity() {
         loadingContainer.visibility = android.view.View.GONE
         schoolListView.visibility = android.view.View.VISIBLE
         searchEditText.isEnabled = true
+        searchIcon.isEnabled = true
         Log.d("SelectSchool", "Loading indicator hidden")
     }
 
