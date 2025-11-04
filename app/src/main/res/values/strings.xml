@@ -3,6 +3,12 @@
     <string name="splash_title">Uni-T</string>
     <string name="splash_slogan">Powered by UniTech</string>
     
+    <!-- Select School Screen Strings -->
+    <string name="select_school_title">Select Your School</string>
+    <string name="search_school_label">Search School</string>
+    <string name="search_hint">Type to search…</string>
+    <string name="search_icon_desc">Search icon</string>
+    
     <!-- Error Screen Strings -->
     <string name="error_title">Error !</string>
     <string name="error_icon_desc">Error icon</string>
