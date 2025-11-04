@@ -8,6 +8,7 @@
     <string name="search_school_label">Search School</string>
     <string name="search_hint">Type to search…</string>
     <string name="search_icon_desc">Search icon</string>
+    <string name="loading_schools">Loading schools…</string>
     
     <!-- Error Screen Strings -->
     <string name="error_title">Error !</string>

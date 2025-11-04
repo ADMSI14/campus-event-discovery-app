@@ -22,9 +22,12 @@ class SelectSchoolActivity : AppCompatActivity() {
     private lateinit var schoolListView: ListView
     private lateinit var searchEditText: EditText
     private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var loadingContainer: android.view.View
     
     private val allSchools = mutableListOf<School>()
     private val schoolNames = mutableListOf<String>()
+    private var isDataLoaded = false
+    private var isInitialLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +38,18 @@ class SelectSchoolActivity : AppCompatActivity() {
         // Initialize views
         schoolListView = findViewById(R.id.schoolListView)
         searchEditText = findViewById(R.id.searchEditText)
+        loadingContainer = findViewById(R.id.loadingContainer)
 
         Log.d("SelectSchool", "Views initialized")
 
-        // Setup ListView adapter with larger text
-        adapter = ArrayAdapter(
+        // Setup ListView adapter WITHOUT backing list
+        adapter = ArrayAdapter<String>(
             this,
-            android.R.layout.simple_list_item_1,
-            schoolNames
+            android.R.layout.simple_list_item_1
         )
         schoolListView.adapter = adapter
 
-        Log.d("SelectSchool", "Adapter set to ListView")
+        Log.d("SelectSchool", "Adapter set to ListView (no backing list)")
         Log.d("SelectSchool", "ListView visibility: ${schoolListView.visibility}")
         Log.d("SelectSchool", "ListView height: ${schoolListView.height}")
         Log.d("SelectSchool", "ListView parent: ${schoolListView.parent}")
@@ -79,26 +82,49 @@ class SelectSchoolActivity : AppCompatActivity() {
             true
         }
         
-        // Fetch schools from API
+        // Show loading, disable search, and fetch schools
+        showLoading()
+        searchEditText.isEnabled = false
         fetchSchools()
+    }
+    
+    private fun showLoading() {
+        loadingContainer.visibility = android.view.View.VISIBLE
+        schoolListView.visibility = android.view.View.GONE
+        Log.d("SelectSchool", "Loading indicator shown")
+    }
+    
+    private fun hideLoading() {
+        loadingContainer.visibility = android.view.View.GONE
+        schoolListView.visibility = android.view.View.VISIBLE
+        searchEditText.isEnabled = true
+        Log.d("SelectSchool", "Loading indicator hidden")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("SelectSchool", "onResume called. Adapter count: ${adapter.count}")
+        Log.d("SelectSchool", "onResume called. isInitialLoad: $isInitialLoad, isDataLoaded: $isDataLoaded, Adapter count: ${adapter.count}")
+        
+        // Skip onResume logic during initial load (first time activity is created)
+        if (isInitialLoad) {
+            Log.d("SelectSchool", "Initial load - skipping onResume logic")
+            isInitialLoad = false
+            return
+        }
         
         // Clear the search bar when returning from ErrorActivity
         searchEditText.setText("")
         Log.d("SelectSchool", "Search bar cleared")
         
-        // Refresh the adapter when returning from ErrorActivity
-        if (adapter.count == 0 && allSchools.isNotEmpty()) {
+        // Refresh if data was already loaded (coming back from ErrorActivity)
+        if (isDataLoaded && adapter.count == 0 && allSchools.isNotEmpty()) {
             Log.d("SelectSchool", "Repopulating adapter with ${allSchools.size} schools")
             adapter.clear()
             adapter.addAll(allSchools.map { it.name })
-        } else if (adapter.count == 0) {
-            Log.d("SelectSchool", "No schools in adapter, fetching from API")
-            fetchSchools()
+            hideLoading()
+        } else if (isDataLoaded && adapter.count > 0) {
+            Log.d("SelectSchool", "Data already displayed, ensuring UI is ready")
+            hideLoading()
         }
     }
 
@@ -117,52 +143,81 @@ class SelectSchoolActivity : AppCompatActivity() {
                         allSchools.clear()
                         allSchools.addAll(schoolResponse.data)
                         
-                        Log.d("SelectSchool", "All schools: ${allSchools.map { it.name }}")
+                        val newSchoolNames = allSchools.map { it.name }
+                        Log.d("SelectSchool", "School names to add: $newSchoolNames")
                         
                         // Update adapter on UI thread
                         runOnUiThread {
                             try {
-                                // Clear and add directly to adapter
-                                adapter.clear()
-                                adapter.addAll(allSchools.map { it.name })
+                                Log.d("SelectSchool", "Updating adapter with ${newSchoolNames.size} schools")
                                 
-                                Log.d("SelectSchool", "Adapter updated. Count: ${adapter.count}")
-                                Log.d("SelectSchool", "ListView child count: ${schoolListView.childCount}")
+                                // Clear adapter first
+                                adapter.clear()
+                                
+                                // Add all schools to adapter
+                                adapter.addAll(newSchoolNames)
+                                
+                                // Update the backing list for search validation
+                                schoolNames.clear()
+                                schoolNames.addAll(newSchoolNames)
+                                
+                                isDataLoaded = true
+                                
+                                // Hide loading and show list
+                                hideLoading()
+                                
+                                Log.d("SelectSchool", "Adapter updated successfully!")
+                                Log.d("SelectSchool", "Adapter count: ${adapter.count}")
                                 
                                 Toast.makeText(
                                     this@SelectSchoolActivity,
                                     "Loaded ${adapter.count} school(s)",
-                                    Toast.LENGTH_LONG
+                                    Toast.LENGTH_SHORT
                                 ).show()
                             } catch (e: Exception) {
                                 Log.e("SelectSchool", "Error updating adapter", e)
+                                hideLoading()
+                                Toast.makeText(
+                                    this@SelectSchoolActivity,
+                                    "Error: ${e.message}",
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                     } ?: run {
-                        Log.e("SelectSchool", "Response body is null")
+                        runOnUiThread {
+                            hideLoading()
+                            Log.e("SelectSchool", "Response body is null")
+                            Toast.makeText(
+                                this@SelectSchoolActivity,
+                                "No data received from server",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                } else {
+                    runOnUiThread {
+                        hideLoading()
+                        Log.e("SelectSchool", "Failed response: ${response.code()} - ${response.message()}")
                         Toast.makeText(
                             this@SelectSchoolActivity,
-                            "No data received from server",
+                            "Failed to load schools: ${response.code()}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else {
-                    Log.e("SelectSchool", "Failed response: ${response.code()} - ${response.message()}")
-                    Toast.makeText(
-                        this@SelectSchoolActivity,
-                        "Failed to load schools: ${response.code()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<SchoolResponse>, t: Throwable) {
-                Log.e("SelectSchool", "API call failed", t)
-                Toast.makeText(
-                    this@SelectSchoolActivity,
-                    "Network error: ${t.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+                runOnUiThread {
+                    hideLoading()
+                    Log.e("SelectSchool", "API call failed", t)
+                    Toast.makeText(
+                        this@SelectSchoolActivity,
+                        "Network error: ${t.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         })
     }
