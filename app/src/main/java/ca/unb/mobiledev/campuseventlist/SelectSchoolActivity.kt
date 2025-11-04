@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ListView
@@ -73,31 +74,54 @@ class SelectSchoolActivity : AppCompatActivity() {
 
     // Fetch schools from API
     private fun fetchSchools() {
+        Log.d("SelectSchool", "Fetching schools from API...")
+        
         RetrofitClient.apiService.getSchools().enqueue(object : Callback<SchoolResponse> {
             override fun onResponse(call: Call<SchoolResponse>, response: Response<SchoolResponse>) {
+                Log.d("SelectSchool", "Response received: ${response.code()}")
+                
                 if (response.isSuccessful) {
                     response.body()?.let { schoolResponse ->
+                        Log.d("SelectSchool", "Schools received: ${schoolResponse.data.size}")
+                        
                         allSchools.clear()
                         allSchools.addAll(schoolResponse.data)
                         
                         schoolNames.clear()
                         schoolNames.addAll(allSchools.map { it.name })
                         
+                        Log.d("SelectSchool", "School names: $schoolNames")
+                        
                         adapter.notifyDataSetChanged()
+                        
+                        Toast.makeText(
+                            this@SelectSchoolActivity,
+                            "Loaded ${schoolNames.size} schools",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } ?: run {
+                        Log.e("SelectSchool", "Response body is null")
+                        Toast.makeText(
+                            this@SelectSchoolActivity,
+                            "No data received from server",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
+                    Log.e("SelectSchool", "Failed response: ${response.code()} - ${response.message()}")
                     Toast.makeText(
                         this@SelectSchoolActivity,
-                        "Failed to load schools",
+                        "Failed to load schools: ${response.code()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
             override fun onFailure(call: Call<SchoolResponse>, t: Throwable) {
+                Log.e("SelectSchool", "API call failed", t)
                 Toast.makeText(
                     this@SelectSchoolActivity,
-                    "Error: ${t.message}",
+                    "Network error: ${t.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
