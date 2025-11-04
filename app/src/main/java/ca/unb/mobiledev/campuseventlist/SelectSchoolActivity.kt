@@ -80,6 +80,20 @@ class SelectSchoolActivity : AppCompatActivity() {
         fetchSchools()
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("SelectSchool", "onResume called. Current schools count: ${schoolNames.size}")
+        
+        // Refresh the adapter when returning from ErrorActivity
+        if (schoolNames.isNotEmpty()) {
+            Log.d("SelectSchool", "Refreshing adapter with existing data")
+            adapter.notifyDataSetChanged()
+        } else {
+            Log.d("SelectSchool", "No schools in list, fetching again")
+            fetchSchools()
+        }
+    }
+
     // Fetch schools from API
     private fun fetchSchools() {
         Log.d("SelectSchool", "Fetching schools from API...")
@@ -150,21 +164,27 @@ class SelectSchoolActivity : AppCompatActivity() {
 
     // Check if school exists in API data and navigate accordingly
     private fun validateAndNavigate(schoolName: String) {
+        Log.d("SelectSchool", "Validating school: $schoolName")
+        Log.d("SelectSchool", "Available schools: ${allSchools.map { it.name }}")
+        
         val schoolExists = allSchools.any { 
             it.name.equals(schoolName, ignoreCase = true) 
         }
 
         if (schoolExists) {
             // School exists - navigate to MainActivity
+            Log.d("SelectSchool", "School found! Navigating to MainActivity")
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("SELECTED_SCHOOL", schoolName)
             startActivity(intent)
             finish()
         } else {
             // School doesn't exist - navigate to ErrorActivity
+            Log.d("SelectSchool", "School not found! Navigating to ErrorActivity")
             val intent = Intent(this, ErrorActivity::class.java)
             intent.putExtra("SCHOOL_NAME", schoolName)
             startActivity(intent)
+            // Don't finish - keep SelectSchoolActivity in back stack
         }
     }
 }
