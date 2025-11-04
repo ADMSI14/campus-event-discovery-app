@@ -85,18 +85,19 @@ class SelectSchoolActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("SelectSchool", "onResume called. Current schools count: ${schoolNames.size}")
+        Log.d("SelectSchool", "onResume called. Adapter count: ${adapter.count}")
         
         // Clear the search bar when returning from ErrorActivity
         searchEditText.setText("")
         Log.d("SelectSchool", "Search bar cleared")
         
         // Refresh the adapter when returning from ErrorActivity
-        if (schoolNames.isNotEmpty()) {
-            Log.d("SelectSchool", "Refreshing adapter with existing data")
-            adapter.notifyDataSetChanged()
-        } else {
-            Log.d("SelectSchool", "No schools in list, fetching again")
+        if (adapter.count == 0 && allSchools.isNotEmpty()) {
+            Log.d("SelectSchool", "Repopulating adapter with ${allSchools.size} schools")
+            adapter.clear()
+            adapter.addAll(allSchools.map { it.name })
+        } else if (adapter.count == 0) {
+            Log.d("SelectSchool", "No schools in adapter, fetching from API")
             fetchSchools()
         }
     }
@@ -116,29 +117,21 @@ class SelectSchoolActivity : AppCompatActivity() {
                         allSchools.clear()
                         allSchools.addAll(schoolResponse.data)
                         
-                        Log.d("SelectSchool", "School names before: $schoolNames")
+                        Log.d("SelectSchool", "All schools: ${allSchools.map { it.name }}")
                         
-                        // Update the school names list
-                        schoolNames.clear()
-                        schoolNames.addAll(allSchools.map { it.name })
-                        
-                        Log.d("SelectSchool", "School names after: $schoolNames")
-                        Log.d("SelectSchool", "Adapter count: ${adapter.count}")
-                        
-                        // Notify adapter on UI thread
+                        // Update adapter on UI thread
                         runOnUiThread {
                             try {
-                                adapter.notifyDataSetChanged()
-                                Log.d("SelectSchool", "Adapter notified. New count: ${adapter.count}")
-                                Log.d("SelectSchool", "ListView child count: ${schoolListView.childCount}")
-                                Log.d("SelectSchool", "ListView adapter count: ${schoolListView.adapter?.count}")
+                                // Clear and add directly to adapter
+                                adapter.clear()
+                                adapter.addAll(allSchools.map { it.name })
                                 
-                                // Force ListView to refresh
-                                schoolListView.invalidateViews()
+                                Log.d("SelectSchool", "Adapter updated. Count: ${adapter.count}")
+                                Log.d("SelectSchool", "ListView child count: ${schoolListView.childCount}")
                                 
                                 Toast.makeText(
                                     this@SelectSchoolActivity,
-                                    "Loaded ${schoolNames.size} school(s)",
+                                    "Loaded ${adapter.count} school(s)",
                                     Toast.LENGTH_LONG
                                 ).show()
                             } catch (e: Exception) {
