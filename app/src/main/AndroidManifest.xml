@@ -26,6 +26,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SelectSchoolActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".ErrorActivity"
             android:exported="false">
         </activity>

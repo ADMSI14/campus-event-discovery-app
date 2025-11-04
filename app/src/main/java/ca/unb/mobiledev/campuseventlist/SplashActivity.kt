@@ -15,9 +15,9 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // Navigate to MainActivity after splash timeout
+        // Navigate to SelectSchoolActivity after splash timeout
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, SelectSchoolActivity::class.java)
             startActivity(intent)
             finish()
         }, splashTimeOut)
