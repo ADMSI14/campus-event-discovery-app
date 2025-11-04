@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Campus Event List</string>
+    <string name="splash_title">Uni-T</string>
+    <string name="splash_slogan">Powered by UniTech</string>
 </resources>
