@@ -20,18 +20,16 @@
         android:textStyle="bold" />
 
     <!-- Scrollable School List Container -->
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/schoolListContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_below="@id/titleText"
         android:layout_marginTop="40dp"
         android:layout_above="@id/searchLabel"
         android:layout_marginBottom="20dp"
         android:background="@drawable/container_background"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:clipChildren="false">
+        android:padding="8dp">
 
         <ListView
             android:id="@+id/schoolListView"
@@ -40,9 +38,9 @@
             android:divider="@android:color/darker_gray"
             android:dividerHeight="1dp"
             android:scrollbars="vertical"
-            android:minHeight="48dp"
-            android:clipToPadding="false" />
-    </LinearLayout>
+            android:clipToPadding="false"
+            android:visibility="visible" />
+    </FrameLayout>
 
     <!-- Search School Label -->
     <TextView

@@ -38,7 +38,7 @@ class SelectSchoolActivity : AppCompatActivity() {
 
         Log.d("SelectSchool", "Views initialized")
 
-        // Setup ListView adapter
+        // Setup ListView adapter with larger text
         adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,
@@ -47,6 +47,9 @@ class SelectSchoolActivity : AppCompatActivity() {
         schoolListView.adapter = adapter
 
         Log.d("SelectSchool", "Adapter set to ListView")
+        Log.d("SelectSchool", "ListView visibility: ${schoolListView.visibility}")
+        Log.d("SelectSchool", "ListView height: ${schoolListView.height}")
+        Log.d("SelectSchool", "ListView parent: ${schoolListView.parent}")
 
         // Handle school selection from list
         schoolListView.setOnItemClickListener { _, _, position, _ ->
@@ -127,11 +130,16 @@ class SelectSchoolActivity : AppCompatActivity() {
                             try {
                                 adapter.notifyDataSetChanged()
                                 Log.d("SelectSchool", "Adapter notified. New count: ${adapter.count}")
+                                Log.d("SelectSchool", "ListView child count: ${schoolListView.childCount}")
+                                Log.d("SelectSchool", "ListView adapter count: ${schoolListView.adapter?.count}")
+                                
+                                // Force ListView to refresh
+                                schoolListView.invalidateViews()
                                 
                                 Toast.makeText(
                                     this@SelectSchoolActivity,
                                     "Loaded ${schoolNames.size} school(s)",
-                                    Toast.LENGTH_SHORT
+                                    Toast.LENGTH_LONG
                                 ).show()
                             } catch (e: Exception) {
                                 Log.e("SelectSchool", "Error updating adapter", e)
