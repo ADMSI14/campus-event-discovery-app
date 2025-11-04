@@ -39,6 +39,18 @@ dependencies {
     implementation libs.material
     implementation libs.androidx.activity
     implementation libs.androidx.constraintlayout
+    
+    // Retrofit for API calls
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.gson
+    
+    // Gson for JSON parsing
+    implementation libs.gson
+    
+    // OkHttp for networking
+    implementation libs.okhttp
+    implementation libs.okhttp.logging.interceptor
+    
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
