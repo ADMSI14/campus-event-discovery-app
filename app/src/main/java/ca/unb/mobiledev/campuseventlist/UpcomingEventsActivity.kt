@@ -297,20 +297,13 @@ class UpcomingEventsActivity : AppCompatActivity() {
             return
         }
         
-        // Clear search bar when returning from EventErrorActivity
+        // Clear search bar and filter when returning from EventErrorActivity
         searchEventEditText.setText("")
-        Log.d("UpcomingEvents", "Search bar cleared")
+        adapter.filter.filter("") // Clear any active filter
+        Log.d("UpcomingEvents", "Search bar and filter cleared")
         
-        // Refresh adapter if data was already loaded
-        if (isDataLoaded && adapter.count == 0 && allEvents.isNotEmpty()) {
-            Log.d("UpcomingEvents", "Repopulating adapter with ${allEvents.size} events")
-            adapter.clear()
-            adapter.addAll(allEvents.map { it.name })
-            hideLoading()
-        } else if (isDataLoaded && adapter.count > 0) {
-            Log.d("UpcomingEvents", "Data already displayed, ensuring UI is ready")
-            hideLoading()
-        }
+        // Ensure loading indicator is hidden
+        hideLoading()
     }
     
     // Validate event and navigate to MainActivity or ErrorActivity
