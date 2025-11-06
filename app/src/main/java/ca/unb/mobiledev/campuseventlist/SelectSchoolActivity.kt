@@ -297,7 +297,7 @@ class SelectSchoolActivity : AppCompatActivity() {
             intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchool.name)
             intent.putExtra("SELECTED_SCHOOL_ID", selectedSchool.id)
             startActivity(intent)
-            finish()
+            // Don't finish - keep SelectSchoolActivity in back stack so user can return
         } else {
             // School doesn't exist - navigate to ErrorActivity
             Log.d("SelectSchool", "School not found! Navigating to ErrorActivity")

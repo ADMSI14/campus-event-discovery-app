@@ -17,6 +17,9 @@ data class Event(
     val description: String,
     
     @SerializedName("location")
-    val location: String
+    val location: String,
+    
+    @SerializedName("date")
+    val date: String? = null  // Event date in format "2025-10-12"
 )
 
