@@ -151,6 +151,10 @@ class UpcomingEventsActivity : AppCompatActivity() {
                         // Handle empty events list (school has no events)
                         if (eventResponse.data.isEmpty()) {
                             runOnUiThread {
+                                allEvents.clear()
+                                eventNames.clear()
+                                adapter.clear()
+                                isDataLoaded = true
                                 hideLoading()
                                 Toast.makeText(
                                     this@UpcomingEventsActivity,
@@ -311,7 +315,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
         Log.d("UpcomingEvents", "Validating event: $eventName")
         
         // Check if we have loaded events data
-        if (allEvents.isEmpty() && !isDataLoaded) {
+        if (!isDataLoaded) {
             Toast.makeText(
                 this,
                 "Please wait for events to load",
@@ -320,13 +324,12 @@ class UpcomingEventsActivity : AppCompatActivity() {
             return
         }
         
-        // Check if events list is empty
+        // If events list is empty, any search should go to EventErrorActivity
         if (allEvents.isEmpty()) {
-            Toast.makeText(
-                this,
-                "No events available for this school",
-                Toast.LENGTH_SHORT
-            ).show()
+            Log.d("UpcomingEvents", "No events available - Navigating to EventErrorActivity")
+            val intent = Intent(this, EventErrorActivity::class.java)
+            intent.putExtra("EVENT_NAME", eventName)
+            startActivity(intent)
             return
         }
         
