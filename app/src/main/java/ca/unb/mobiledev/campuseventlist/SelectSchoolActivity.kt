@@ -283,9 +283,9 @@ class SelectSchoolActivity : AppCompatActivity() {
         }
 
         if (selectedSchool != null) {
-            // School exists - navigate to MainActivity (or UpcomingEventsActivity in future)
+            // School exists - navigate to UpcomingEventsActivity
             Log.d("SelectSchool", "School found! ID: ${selectedSchool.id}, Name: ${selectedSchool.name}")
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, UpcomingEventsActivity::class.java)
             intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchool.name)
             intent.putExtra("SELECTED_SCHOOL_ID", selectedSchool.id)
             startActivity(intent)
