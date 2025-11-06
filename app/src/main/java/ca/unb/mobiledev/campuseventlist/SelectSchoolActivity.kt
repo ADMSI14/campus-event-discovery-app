@@ -251,14 +251,12 @@ class SelectSchoolActivity : AppCompatActivity() {
     private fun loadFallbackData() {
         Log.d("SelectSchool", "Loading fallback test data")
         
-        // Create test School objects with IDs
-        val testSchool1 = School("9d433dfa-5015-4748-8e77-28dcaa4d03f7", "University of New Brunswick")
-        val testSchool2 = School("test-id-2", "St. Thomas University")
-        val testSchool3 = School("test-id-3", "NBCC")
-        val testSchool4 = School("test-id-4", "NBCCD")
+        // Create School objects matching real API data (with real IDs)
+        val school1 = School("9d433dfa-5015-4748-8e77-28dcaa4d03f7", "University of New Brunswick")
+        val school2 = School("e43943a6-b9b2-4d97-a75f-6d79fa3e951e", "Mount Allison University")
         
         allSchools.clear()
-        allSchools.addAll(listOf(testSchool1, testSchool2, testSchool3, testSchool4))
+        allSchools.addAll(listOf(school1, school2))
         
         val newSchoolNames = allSchools.map { it.name }
         
@@ -279,15 +277,17 @@ class SelectSchoolActivity : AppCompatActivity() {
         Log.d("SelectSchool", "Validating school: $schoolName")
         Log.d("SelectSchool", "Available schools: ${allSchools.map { it.name }}")
         
-        val schoolExists = allSchools.any { 
+        // Find the selected school object
+        val selectedSchool = allSchools.find { 
             it.name.equals(schoolName, ignoreCase = true) 
         }
 
-        if (schoolExists) {
-            // School exists - navigate to MainActivity
-            Log.d("SelectSchool", "School found! Navigating to MainActivity")
+        if (selectedSchool != null) {
+            // School exists - navigate to MainActivity (or UpcomingEventsActivity in future)
+            Log.d("SelectSchool", "School found! ID: ${selectedSchool.id}, Name: ${selectedSchool.name}")
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("SELECTED_SCHOOL", schoolName)
+            intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchool.name)
+            intent.putExtra("SELECTED_SCHOOL_ID", selectedSchool.id)
             startActivity(intent)
             finish()
         } else {
