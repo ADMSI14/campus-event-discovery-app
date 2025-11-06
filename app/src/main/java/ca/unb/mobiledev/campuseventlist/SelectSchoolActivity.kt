@@ -98,12 +98,20 @@ class SelectSchoolActivity : AppCompatActivity() {
     // Perform search validation and navigation
     private fun performSearch() {
         val searchedSchool = searchEditText.text.toString().trim()
-        if (searchedSchool.isNotEmpty()) {
-            Log.d("SelectSchool", "Search submitted: $searchedSchool")
-            validateAndNavigate(searchedSchool)
-        } else {
+        
+        if (searchedSchool.isEmpty()) {
             Toast.makeText(this, "Please enter a school name", Toast.LENGTH_SHORT).show()
+            return
         }
+        
+        // Check if data is still loading
+        if (allSchools.isEmpty() && !isDataLoaded) {
+            Toast.makeText(this, "Please wait for schools to load", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        Log.d("SelectSchool", "Search submitted: $searchedSchool")
+        validateAndNavigate(searchedSchool)
     }
     
     private fun showLoading() {
@@ -298,5 +306,11 @@ class SelectSchoolActivity : AppCompatActivity() {
             startActivity(intent)
             // Don't finish - keep SelectSchoolActivity in back stack
         }
+    }
+    
+    override fun onBackPressed() {
+        // Handle system back button
+        Log.d("SelectSchool", "Back button pressed - exiting app")
+        super.onBackPressed()
     }
 }

@@ -148,6 +148,19 @@ class UpcomingEventsActivity : AppCompatActivity() {
                     response.body()?.let { eventResponse ->
                         Log.d("UpcomingEvents", "Events received: ${eventResponse.data.size}")
                         
+                        // Handle empty events list (school has no events)
+                        if (eventResponse.data.isEmpty()) {
+                            runOnUiThread {
+                                hideLoading()
+                                Toast.makeText(
+                                    this@UpcomingEventsActivity,
+                                    "No events found for this school",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            return
+                        }
+                        
                         allEvents.clear()
                         allEvents.addAll(eventResponse.data)
                         
@@ -303,6 +316,27 @@ class UpcomingEventsActivity : AppCompatActivity() {
     // Validate event and navigate to MainActivity or ErrorActivity
     private fun validateEventAndNavigate(eventName: String) {
         Log.d("UpcomingEvents", "Validating event: $eventName")
+        
+        // Check if we have loaded events data
+        if (allEvents.isEmpty() && !isDataLoaded) {
+            Toast.makeText(
+                this,
+                "Please wait for events to load",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        
+        // Check if events list is empty
+        if (allEvents.isEmpty()) {
+            Toast.makeText(
+                this,
+                "No events available for this school",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        
         Log.d("UpcomingEvents", "Available events: ${allEvents.map { it.name }}")
         
         // Find the selected event object
@@ -331,6 +365,12 @@ class UpcomingEventsActivity : AppCompatActivity() {
             startActivity(intent)
             // Don't finish - keep UpcomingEventsActivity in back stack
         }
+    }
+    
+    override fun onBackPressed() {
+        // Handle back button press
+        Log.d("UpcomingEvents", "Back button pressed - returning to SelectSchoolActivity")
+        super.onBackPressed()
     }
 }
 
