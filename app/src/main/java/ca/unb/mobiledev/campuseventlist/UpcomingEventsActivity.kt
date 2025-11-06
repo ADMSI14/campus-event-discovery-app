@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.campuseventlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -299,11 +300,37 @@ class UpcomingEventsActivity : AppCompatActivity() {
         }
     }
     
-    // Validate event and navigate
+    // Validate event and navigate to MainActivity or ErrorActivity
     private fun validateEventAndNavigate(eventName: String) {
         Log.d("UpcomingEvents", "Validating event: $eventName")
-        // Placeholder for now - will be implemented in Step 9
-        Toast.makeText(this, "Event validation not implemented yet", Toast.LENGTH_SHORT).show()
+        Log.d("UpcomingEvents", "Available events: ${allEvents.map { it.name }}")
+        
+        // Find the selected event object
+        val selectedEvent = allEvents.find { 
+            it.name.equals(eventName, ignoreCase = true) 
+        }
+
+        if (selectedEvent != null) {
+            // Event exists - navigate to MainActivity
+            Log.d("UpcomingEvents", "Event found! ID: ${selectedEvent.id}, Name: ${selectedEvent.name}")
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchoolName)
+            intent.putExtra("SELECTED_SCHOOL_ID", selectedSchoolId)
+            intent.putExtra("SELECTED_EVENT_ID", selectedEvent.id)
+            intent.putExtra("SELECTED_EVENT_NAME", selectedEvent.name)
+            intent.putExtra("SELECTED_EVENT_DESCRIPTION", selectedEvent.description)
+            intent.putExtra("SELECTED_EVENT_LOCATION", selectedEvent.location)
+            startActivity(intent)
+            finish()
+        } else {
+            // Event doesn't exist - navigate to ErrorActivity
+            Log.d("UpcomingEvents", "Event not found! Navigating to ErrorActivity")
+            val intent = Intent(this, ErrorActivity::class.java)
+            intent.putExtra("SCHOOL_NAME", eventName)
+            intent.putExtra("IS_EVENT_ERROR", true) // Flag to distinguish from school error
+            startActivity(intent)
+            // Don't finish - keep UpcomingEventsActivity in back stack
+        }
     }
 }
 
