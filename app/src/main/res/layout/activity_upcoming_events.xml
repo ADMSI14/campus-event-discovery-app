@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="24dp">
+
+    <!-- Title: "Upcoming Events" -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/upcoming_events_title"
+        android:textSize="40sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <!-- Selected School Label -->
+    <TextView
+        android:id="@+id/selectedSchoolLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleText"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/school_label_background"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:text="University of New Brunswick"
+        android:textSize="16sp"
+        android:textColor="@android:color/black" />
+
+    <!-- Search Event Subtitle -->
+    <TextView
+        android:id="@+id/searchEventLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/selectedSchoolLabel"
+        android:layout_marginTop="24dp"
+        android:text="@string/search_event_label"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <!-- Search Event Input Container -->
+    <RelativeLayout
+        android:id="@+id/searchEventContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchEventLabel"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/search_background"
+        android:padding="12dp"
+        android:minHeight="48dp">
+
+        <EditText
+            android:id="@+id/searchEventEditText"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/searchEventIcon"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:hint="@string/search_event_hint"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textColorHint="#666666"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:autofillHints="eventName"
+            android:importantForAutofill="yes"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp" />
+
+        <ImageView
+            android:id="@+id/searchEventIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_search"
+            android:contentDescription="@string/search_event_icon_desc"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            app:tint="#000000" />
+    </RelativeLayout>
+
+    <!-- Placeholder for Part 2: Events List Container, Loading, Back Button -->
+
+</RelativeLayout>
+
