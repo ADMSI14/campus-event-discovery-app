@@ -2,6 +2,7 @@ package ca.unb.mobiledev.campuseventlist
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -10,7 +11,7 @@ class ErrorActivity : AppCompatActivity() {
     private lateinit var schoolNameLabel: TextView
     private lateinit var selectedSchoolText: TextView
     private lateinit var notEnrolledText: TextView
-    private lateinit var returnButton: TextView
+    private lateinit var returnButton: ImageView
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
