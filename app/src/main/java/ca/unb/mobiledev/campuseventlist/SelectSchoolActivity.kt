@@ -86,10 +86,12 @@ class SelectSchoolActivity : AppCompatActivity() {
             performSearch()
         }
         
-        // Show loading, disable search, and fetch schools
+        // Show loading and disable search
         showLoading()
         searchEditText.isEnabled = false
         searchIcon.isEnabled = false
+        
+        // Fetch schools from API
         fetchSchools()
     }
     
@@ -214,12 +216,15 @@ class SelectSchoolActivity : AppCompatActivity() {
                     }
                 } else {
                     runOnUiThread {
-                        hideLoading()
                         Log.e("SelectSchool", "Failed response: ${response.code()} - ${response.message()}")
+                        
+                        // Load fallback test data for failed responses (like 522)
+                        loadFallbackData()
+                        
                         Toast.makeText(
                             this@SelectSchoolActivity,
-                            "Failed to load schools: ${response.code()}",
-                            Toast.LENGTH_SHORT
+                            "Using offline data (API error: ${response.code()})",
+                            Toast.LENGTH_LONG
                         ).show()
                     }
                 }
@@ -227,11 +232,14 @@ class SelectSchoolActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<SchoolResponse>, t: Throwable) {
                 runOnUiThread {
-                    hideLoading()
                     Log.e("SelectSchool", "API call failed", t)
+                    
+                    // Load fallback test data when API fails
+                    loadFallbackData()
+                    
                     Toast.makeText(
                         this@SelectSchoolActivity,
-                        "Network error: ${t.message}",
+                        "Using offline data (API unavailable)",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -239,6 +247,33 @@ class SelectSchoolActivity : AppCompatActivity() {
         })
     }
 
+    // Load fallback data when API fails
+    private fun loadFallbackData() {
+        Log.d("SelectSchool", "Loading fallback test data")
+        
+        // Create test School objects with IDs
+        val testSchool1 = School("9d433dfa-5015-4748-8e77-28dcaa4d03f7", "University of New Brunswick")
+        val testSchool2 = School("test-id-2", "St. Thomas University")
+        val testSchool3 = School("test-id-3", "NBCC")
+        val testSchool4 = School("test-id-4", "NBCCD")
+        
+        allSchools.clear()
+        allSchools.addAll(listOf(testSchool1, testSchool2, testSchool3, testSchool4))
+        
+        val newSchoolNames = allSchools.map { it.name }
+        
+        adapter.clear()
+        adapter.addAll(newSchoolNames)
+        
+        schoolNames.clear()
+        schoolNames.addAll(newSchoolNames)
+        
+        isDataLoaded = true
+        hideLoading()
+        
+        Log.d("SelectSchool", "Fallback data loaded. Adapter count: ${adapter.count}")
+    }
+    
     // Check if school exists in API data and navigate accordingly
     private fun validateAndNavigate(schoolName: String) {
         Log.d("SelectSchool", "Validating school: $schoolName")
