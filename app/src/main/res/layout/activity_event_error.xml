@@ -62,7 +62,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black" />
 
-        <!-- "Is not available in Uni-T" text -->
+        <!-- "is not available in Uni-T" text -->
         <TextView
             android:id="@+id/notAvailableText"
             android:layout_width="wrap_content"
@@ -74,14 +74,15 @@
             android:textSize="20sp"
             android:textColor="@android:color/black" />
 
-        <!-- Back Button (Blue Circle) -->
+        <!-- Back Button (Blue Circle) - Bottom Left Corner -->
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_below="@id/notAvailableText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="0dp"
             android:src="@android:drawable/ic_menu_revert"
             android:contentDescription="@string/back_button_desc"
             android:clickable="true"
