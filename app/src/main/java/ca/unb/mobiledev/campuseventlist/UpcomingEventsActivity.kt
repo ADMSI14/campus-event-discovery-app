@@ -11,7 +11,13 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.campuseventlist.api.RetrofitClient
 import ca.unb.mobiledev.campuseventlist.models.Event
+import ca.unb.mobiledev.campuseventlist.models.EventResponse
+import ca.unb.mobiledev.campuseventlist.models.School
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class UpcomingEventsActivity : AppCompatActivity() {
     
@@ -101,6 +107,158 @@ class UpcomingEventsActivity : AppCompatActivity() {
         }
 
         Log.d("UpcomingEvents", "Setup complete")
+        
+        // Show loading and disable search, then fetch events
+        showLoading()
+        searchEventEditText.isEnabled = false
+        searchEventIcon.isEnabled = false
+        fetchEvents()
+    }
+    
+    private fun showLoading() {
+        loadingEventsContainer.visibility = android.view.View.VISIBLE
+        eventsListView.visibility = android.view.View.GONE
+        Log.d("UpcomingEvents", "Loading indicator shown")
+    }
+    
+    private fun hideLoading() {
+        loadingEventsContainer.visibility = android.view.View.GONE
+        eventsListView.visibility = android.view.View.VISIBLE
+        searchEventEditText.isEnabled = true
+        searchEventIcon.isEnabled = true
+        Log.d("UpcomingEvents", "Loading indicator hidden")
+    }
+    
+    // Fetch events from API for selected school
+    private fun fetchEvents() {
+        if (selectedSchoolId.isEmpty()) {
+            Log.e("UpcomingEvents", "No school ID provided, loading fallback data")
+            loadFallbackEvents()
+            return
+        }
+        
+        Log.d("UpcomingEvents", "Fetching events for school ID: $selectedSchoolId")
+        
+        RetrofitClient.apiService.getEventsBySchool(selectedSchoolId).enqueue(object : Callback<EventResponse> {
+            override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+                Log.d("UpcomingEvents", "Response received: ${response.code()}")
+                
+                if (response.isSuccessful) {
+                    response.body()?.let { eventResponse ->
+                        Log.d("UpcomingEvents", "Events received: ${eventResponse.data.size}")
+                        
+                        allEvents.clear()
+                        allEvents.addAll(eventResponse.data)
+                        
+                        val newEventNames = allEvents.map { it.name }
+                        Log.d("UpcomingEvents", "Event names to add: $newEventNames")
+                        
+                        // Update adapter on UI thread
+                        runOnUiThread {
+                            try {
+                                Log.d("UpcomingEvents", "Updating adapter with ${newEventNames.size} events")
+                                
+                                adapter.clear()
+                                adapter.addAll(newEventNames)
+                                
+                                eventNames.clear()
+                                eventNames.addAll(newEventNames)
+                                
+                                isDataLoaded = true
+                                hideLoading()
+                                
+                                Log.d("UpcomingEvents", "Adapter updated. Count: ${adapter.count}")
+                                
+                                Toast.makeText(
+                                    this@UpcomingEventsActivity,
+                                    "Loaded ${adapter.count} event(s)",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                Log.e("UpcomingEvents", "Error updating adapter", e)
+                                hideLoading()
+                                Toast.makeText(
+                                    this@UpcomingEventsActivity,
+                                    "Error: ${e.message}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    } ?: run {
+                        runOnUiThread {
+                            hideLoading()
+                            Log.e("UpcomingEvents", "Response body is null")
+                            Toast.makeText(
+                                this@UpcomingEventsActivity,
+                                "No data received from server",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                } else {
+                    runOnUiThread {
+                        Log.e("UpcomingEvents", "Failed response: ${response.code()}")
+                        loadFallbackEvents()
+                        Toast.makeText(
+                            this@UpcomingEventsActivity,
+                            "Using offline data (API error: ${response.code()})",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+                runOnUiThread {
+                    Log.e("UpcomingEvents", "API call failed", t)
+                    loadFallbackEvents()
+                    Toast.makeText(
+                        this@UpcomingEventsActivity,
+                        "Using offline data (API unavailable)",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        })
+    }
+    
+    // Load fallback event data when API fails
+    private fun loadFallbackEvents() {
+        Log.d("UpcomingEvents", "Loading fallback event data")
+        
+        // Create test events for the selected school
+        val school = School(selectedSchoolId, selectedSchoolName)
+        
+        val event1 = Event(
+            "event-1", 
+            school, 
+            "UNB Residence Orientation", 
+            "Welcome to UNB",
+            "SRID=4326;POINT (-66.46689684501543 45.848150283597036)"
+        )
+        val event2 = Event(
+            "event-2",
+            school,
+            "Halloween at The Cellar",
+            "Halloween party at The Cellar",
+            "SRID=4326;POINT (-0.0450959801673889 0.0147347150608942)"
+        )
+        
+        allEvents.clear()
+        allEvents.addAll(listOf(event1, event2))
+        
+        val newEventNames = allEvents.map { it.name }
+        
+        adapter.clear()
+        adapter.addAll(newEventNames)
+        
+        eventNames.clear()
+        eventNames.addAll(newEventNames)
+        
+        isDataLoaded = true
+        hideLoading()
+        
+        Log.d("UpcomingEvents", "Fallback events loaded. Adapter count: ${adapter.count}")
     }
     
     // Perform event search
