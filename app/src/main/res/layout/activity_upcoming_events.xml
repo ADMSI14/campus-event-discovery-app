@@ -90,7 +90,71 @@
             app:tint="#000000" />
     </RelativeLayout>
 
-    <!-- Placeholder for Part 2: Events List Container, Loading, Back Button -->
+    <!-- Scrollable Events List Container -->
+    <FrameLayout
+        android:id="@+id/eventsListContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/searchEventContainer"
+        android:layout_marginTop="24dp"
+        android:layout_above="@id/backButton"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/container_background"
+        android:padding="8dp">
+
+        <ListView
+            android:id="@+id/eventsListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"
+            android:visibility="visible" />
+
+        <!-- Loading Indicator -->
+        <LinearLayout
+            android:id="@+id/loadingEventsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/loadingEventsProgressBar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/loadingEventsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/loading_events"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Back Button (Bottom Left) -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp"
+        android:src="@android:drawable/ic_menu_revert"
+        android:contentDescription="@string/back_button_desc"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/back_button_background"
+        android:padding="12dp"
+        app:tint="#FFFFFF" />
 
 </RelativeLayout>
+
 
