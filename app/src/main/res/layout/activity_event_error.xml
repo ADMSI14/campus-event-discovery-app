@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- Error Icon (Red Circle with Exclamation Mark) -->
+        <ImageView
+            android:id="@+id/errorIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80dp"
+            android:src="@drawable/error_icon"
+            android:contentDescription="@string/error_icon_desc" />
+
+        <!-- Error Text -->
+        <TextView
+            android:id="@+id/errorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/errorIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/error_title"
+            android:textSize="36sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <!-- "your selected event:" text -->
+        <TextView
+            android:id="@+id/selectedEventText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/errorText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:text="@string/selected_event_text"
+            android:textSize="20sp"
+            android:textColor="@android:color/black" />
+
+        <!-- Event Name Label -->
+        <TextView
+            android:id="@+id/eventNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/selectedEventText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/school_name_label_background"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="12dp"
+            android:text="Event Name"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+        <!-- "Is not available in Uni-T" text -->
+        <TextView
+            android:id="@+id/notAvailableText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eventNameLabel"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/event_not_available_text"
+            android:textSize="20sp"
+            android:textColor="@android:color/black" />
+
+        <!-- Back Button (Blue Circle) -->
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/notAvailableText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:contentDescription="@string/back_button_desc"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/back_button_background"
+            android:padding="12dp"
+            app:tint="#FFFFFF" />
+
+    </RelativeLayout>
+</ScrollView>
+

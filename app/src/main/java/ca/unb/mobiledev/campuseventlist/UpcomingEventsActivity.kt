@@ -297,7 +297,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
             return
         }
         
-        // Clear search bar when returning from ErrorActivity
+        // Clear search bar when returning from EventErrorActivity
         searchEventEditText.setText("")
         Log.d("UpcomingEvents", "Search bar cleared")
         
@@ -357,11 +357,10 @@ class UpcomingEventsActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            // Event doesn't exist - navigate to ErrorActivity
-            Log.d("UpcomingEvents", "Event not found! Navigating to ErrorActivity")
-            val intent = Intent(this, ErrorActivity::class.java)
-            intent.putExtra("SCHOOL_NAME", eventName)
-            intent.putExtra("IS_EVENT_ERROR", true) // Flag to distinguish from school error
+            // Event doesn't exist - navigate to EventErrorActivity
+            Log.d("UpcomingEvents", "Event not found! Navigating to EventErrorActivity")
+            val intent = Intent(this, EventErrorActivity::class.java)
+            intent.putExtra("EVENT_NAME", eventName)
             startActivity(intent)
             // Don't finish - keep UpcomingEventsActivity in back stack
         }
