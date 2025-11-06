@@ -272,6 +272,33 @@ class UpcomingEventsActivity : AppCompatActivity() {
         }
     }
     
+    override fun onResume() {
+        super.onResume()
+        Log.d("UpcomingEvents", "onResume called. isInitialLoad: $isInitialLoad, Adapter count: ${adapter.count}")
+        
+        // Skip onResume logic during initial load
+        if (isInitialLoad) {
+            Log.d("UpcomingEvents", "Initial load - skipping onResume logic")
+            isInitialLoad = false
+            return
+        }
+        
+        // Clear search bar when returning from ErrorActivity
+        searchEventEditText.setText("")
+        Log.d("UpcomingEvents", "Search bar cleared")
+        
+        // Refresh adapter if data was already loaded
+        if (isDataLoaded && adapter.count == 0 && allEvents.isNotEmpty()) {
+            Log.d("UpcomingEvents", "Repopulating adapter with ${allEvents.size} events")
+            adapter.clear()
+            adapter.addAll(allEvents.map { it.name })
+            hideLoading()
+        } else if (isDataLoaded && adapter.count > 0) {
+            Log.d("UpcomingEvents", "Data already displayed, ensuring UI is ready")
+            hideLoading()
+        }
+    }
+    
     // Validate event and navigate
     private fun validateEventAndNavigate(eventName: String) {
         Log.d("UpcomingEvents", "Validating event: $eventName")
