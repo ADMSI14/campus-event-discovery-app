@@ -107,7 +107,8 @@
         <TextView
             android:id="@+id/returnButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
             android:layout_below="@id/sendRequestButton"
             android:layout_marginTop="40dp"
             android:drawableStart="@android:drawable/ic_menu_revert"
@@ -116,7 +117,11 @@
             android:textSize="16sp"
             android:textColor="@android:color/black"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp" />
 
     </RelativeLayout>
 </ScrollView>
