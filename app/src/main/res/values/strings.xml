@@ -18,4 +18,9 @@
     <string name="error_explanation">Click below to send an automatic email to your schools administration, requesting them to join Uni-T !</string>
     <string name="send_request_button">Send Request for Enrolment</string>
     <string name="return_to_selection">Return to the School Selection Screen</string>
+
+    <!-- Map Screen Strings -->
+    <string name="google_maps_key"></string>
+    <string name="permission_denied">Location Permissions Denied</string>
+    <string name="fetch_location_error">Unable to fetch the location</string>
 </resources>
