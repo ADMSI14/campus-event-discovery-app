@@ -16,5 +16,9 @@ interface SchoolApiService {
     // GET request to retrieve events for a specific school
     @GET("v1/blog/events/school/{schoolId}")
     fun getEventsBySchool(@Path("schoolId") schoolId: String): Call<EventResponse>
+
+    // GET request to retrieve event details
+    @GET("v1/blog/events/{eventId}")
+    fun getEventsById(@Path("eventId") eventId: String): Call<EventResponse>
 }
 
