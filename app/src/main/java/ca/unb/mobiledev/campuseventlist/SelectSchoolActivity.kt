@@ -86,22 +86,32 @@ class SelectSchoolActivity : AppCompatActivity() {
             performSearch()
         }
         
-        // Show loading, disable search, and fetch schools
+        // Show loading and disable search
         showLoading()
         searchEditText.isEnabled = false
         searchIcon.isEnabled = false
+        
+        // Fetch schools from API
         fetchSchools()
     }
     
     // Perform search validation and navigation
     private fun performSearch() {
         val searchedSchool = searchEditText.text.toString().trim()
-        if (searchedSchool.isNotEmpty()) {
-            Log.d("SelectSchool", "Search submitted: $searchedSchool")
-            validateAndNavigate(searchedSchool)
-        } else {
+        
+        if (searchedSchool.isEmpty()) {
             Toast.makeText(this, "Please enter a school name", Toast.LENGTH_SHORT).show()
+            return
         }
+        
+        // Check if data is still loading
+        if (allSchools.isEmpty() && !isDataLoaded) {
+            Toast.makeText(this, "Please wait for schools to load", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        Log.d("SelectSchool", "Search submitted: $searchedSchool")
+        validateAndNavigate(searchedSchool)
     }
     
     private fun showLoading() {
@@ -214,12 +224,15 @@ class SelectSchoolActivity : AppCompatActivity() {
                     }
                 } else {
                     runOnUiThread {
-                        hideLoading()
                         Log.e("SelectSchool", "Failed response: ${response.code()} - ${response.message()}")
+                        
+                        // Load fallback test data for failed responses (like 522)
+                        loadFallbackData()
+                        
                         Toast.makeText(
                             this@SelectSchoolActivity,
-                            "Failed to load schools: ${response.code()}",
-                            Toast.LENGTH_SHORT
+                            "Using offline data (API error: ${response.code()})",
+                            Toast.LENGTH_LONG
                         ).show()
                     }
                 }
@@ -227,11 +240,14 @@ class SelectSchoolActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<SchoolResponse>, t: Throwable) {
                 runOnUiThread {
-                    hideLoading()
                     Log.e("SelectSchool", "API call failed", t)
+                    
+                    // Load fallback test data when API fails
+                    loadFallbackData()
+                    
                     Toast.makeText(
                         this@SelectSchoolActivity,
-                        "Network error: ${t.message}",
+                        "Using offline data (API unavailable)",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -239,22 +255,49 @@ class SelectSchoolActivity : AppCompatActivity() {
         })
     }
 
+    // Load fallback data when API fails
+    private fun loadFallbackData() {
+        Log.d("SelectSchool", "Loading fallback test data")
+        
+        // Create School objects matching real API data (with real IDs)
+        val school1 = School("9d433dfa-5015-4748-8e77-28dcaa4d03f7", "University of New Brunswick")
+        val school2 = School("e43943a6-b9b2-4d97-a75f-6d79fa3e951e", "Mount Allison University")
+        
+        allSchools.clear()
+        allSchools.addAll(listOf(school1, school2))
+        
+        val newSchoolNames = allSchools.map { it.name }
+        
+        adapter.clear()
+        adapter.addAll(newSchoolNames)
+        
+        schoolNames.clear()
+        schoolNames.addAll(newSchoolNames)
+        
+        isDataLoaded = true
+        hideLoading()
+        
+        Log.d("SelectSchool", "Fallback data loaded. Adapter count: ${adapter.count}")
+    }
+    
     // Check if school exists in API data and navigate accordingly
     private fun validateAndNavigate(schoolName: String) {
         Log.d("SelectSchool", "Validating school: $schoolName")
         Log.d("SelectSchool", "Available schools: ${allSchools.map { it.name }}")
         
-        val schoolExists = allSchools.any { 
+        // Find the selected school object
+        val selectedSchool = allSchools.find { 
             it.name.equals(schoolName, ignoreCase = true) 
         }
 
-        if (schoolExists) {
-            // School exists - navigate to MainActivity
-            Log.d("SelectSchool", "School found! Navigating to MainActivity")
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("SELECTED_SCHOOL", schoolName)
+        if (selectedSchool != null) {
+            // School exists - navigate to UpcomingEventsActivity
+            Log.d("SelectSchool", "School found! ID: ${selectedSchool.id}, Name: ${selectedSchool.name}")
+            val intent = Intent(this, UpcomingEventsActivity::class.java)
+            intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchool.name)
+            intent.putExtra("SELECTED_SCHOOL_ID", selectedSchool.id)
             startActivity(intent)
-            finish()
+            // Don't finish - keep SelectSchoolActivity in back stack so user can return
         } else {
             // School doesn't exist - navigate to ErrorActivity
             Log.d("SelectSchool", "School not found! Navigating to ErrorActivity")
@@ -263,5 +306,11 @@ class SelectSchoolActivity : AppCompatActivity() {
             startActivity(intent)
             // Don't finish - keep SelectSchoolActivity in back stack
         }
+    }
+    
+    override fun onBackPressed() {
+        // Handle system back button
+        Log.d("SelectSchool", "Back button pressed - exiting app")
+        super.onBackPressed()
     }
 }

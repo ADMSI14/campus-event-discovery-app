@@ -35,83 +35,54 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <!-- "your selected school:" text -->
+        <!-- "your selected event:" text -->
         <TextView
-            android:id="@+id/selectedSchoolText"
+            android:id="@+id/selectedEventText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/errorText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
-            android:text="@string/selected_school_text"
+            android:text="@string/selected_event_text"
             android:textSize="20sp"
             android:textColor="@android:color/black" />
 
-        <!-- School Name Label -->
+        <!-- Event Name Label -->
         <TextView
-            android:id="@+id/schoolNameLabel"
+            android:id="@+id/eventNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/selectedSchoolText"
+            android:layout_below="@id/selectedEventText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:background="@drawable/school_name_label_background"
             android:paddingHorizontal="24dp"
             android:paddingVertical="12dp"
-            android:text="School Name"
+            android:text="Event Name"
             android:textSize="18sp"
             android:textColor="@android:color/black" />
 
-        <!-- "Has not yet enrolled with Uni-T" text -->
+        <!-- "is not available in Uni-T" text -->
         <TextView
-            android:id="@+id/notEnrolledText"
+            android:id="@+id/notAvailableText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/schoolNameLabel"
+            android:layout_below="@id/eventNameLabel"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:text="@string/not_enrolled_text"
+            android:text="@string/event_not_available_text"
             android:textSize="20sp"
             android:textColor="@android:color/black" />
 
-        <!-- Explanation Text -->
-        <TextView
-            android:id="@+id/explanationText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/notEnrolledText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:layout_marginHorizontal="20dp"
-            android:text="@string/error_explanation"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:textAlignment="center"
-            android:gravity="center" />
-
-        <!-- Send Request Button -->
-        <Button
-            android:id="@+id/sendRequestButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/explanationText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/send_request_button_background"
-            android:text="@string/send_request_button"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:paddingHorizontal="32dp"
-            android:paddingVertical="12dp" />
-
-        <!-- Back Button (Bottom Left) -->
+        <!-- Back Button (Blue Circle) - Bottom Left Corner -->
         <ImageView
-            android:id="@+id/returnButton"
+            android:id="@+id/backButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="20dp"
+            android:layout_marginStart="0dp"
             android:src="@android:drawable/ic_menu_revert"
             android:contentDescription="@string/back_button_desc"
             android:clickable="true"
