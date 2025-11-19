@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import ca.unb.mobiledev.campuseventlist.api.RetrofitClient
 import ca.unb.mobiledev.campuseventlist.models.Event
 import ca.unb.mobiledev.campuseventlist.models.EventResponse
-import ca.unb.mobiledev.campuseventlist.models.School
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -245,21 +244,23 @@ class UpcomingEventsActivity : AppCompatActivity() {
         Log.d("UpcomingEvents", "Loading fallback event data")
         
         // Create test events for the selected school
-        val school = School(selectedSchoolId, selectedSchoolName)
-        
         val event1 = Event(
             "event-1", 
-            school, 
+            selectedSchoolId, 
             "UNB Residence Orientation", 
             "Welcome to UNB",
-            "SRID=4326;POINT (-66.46689684501543 45.848150283597036)"
+            "SRID=4326;POINT (-66.46689684501543 45.848150283597036)",
+            "2025-11-15",
+            "2025-11-15T11:15:18.661510-04:00"
         )
         val event2 = Event(
             "event-2",
-            school,
+            selectedSchoolId,
             "Halloween at The Cellar",
             "Halloween party at The Cellar",
-            "SRID=4326;POINT (-0.0450959801673889 0.0147347150608942)"
+            "SRID=4326;POINT (-0.0450959801673889 0.0147347150608942)",
+            "2025-11-15",
+            "2025-11-15T11:15:18.661510-04:00"
         )
         
         allEvents.clear()

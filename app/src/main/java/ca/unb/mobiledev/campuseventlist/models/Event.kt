@@ -8,7 +8,7 @@ data class Event(
     val id: String,
     
     @SerializedName("school")
-    val school: School,
+    val school: String,  // School ID as string
     
     @SerializedName("name")
     val name: String,
@@ -19,7 +19,10 @@ data class Event(
     @SerializedName("location")
     val location: String,
     
-    @SerializedName("date")
-    val date: String? = null  // Event date in format "2025-10-12"
+    @SerializedName("created_at")
+    val createdAt: String? = null,  // Event creation date in format "2025-11-15"
+    
+    @SerializedName("event_date_time")
+    val eventDateTime: String? = null  // Event date and time in format "2025-11-15T11:15:18.661510-04:00"
 )
 
