@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.campuseventlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -37,6 +38,9 @@ class EventDetailsActivity : AppCompatActivity() {
         // Initialize views
         initializeViews()
         
+        // Setup button listeners
+        setupListeners()
+        
         // Fetch event details
         fetchEventDetails()
     }
@@ -49,6 +53,23 @@ class EventDetailsActivity : AppCompatActivity() {
         viewOnMapButton = findViewById(R.id.viewOnMapButton)
         saveEventButton = findViewById(R.id.saveEventButton)
         backButton = findViewById(R.id.backButton)
+    }
+    
+    private fun setupListeners() {
+        backButton.setOnClickListener {
+            Log.d("EventDetails", "Back button clicked")
+            finish() // Returns to UpcomingEventsActivity
+        }
+        
+        viewOnMapButton.setOnClickListener {
+            Log.d("EventDetails", "View on Map button clicked")
+            navigateToMap()
+        }
+        
+        saveEventButton.setOnClickListener {
+            Log.d("EventDetails", "Save Event button clicked")
+            saveEvent()
+        }
     }
     
     private fun fetchEventDetails() {
@@ -117,6 +138,22 @@ class EventDetailsActivity : AppCompatActivity() {
         } else {
             location
         }
+    }
+    
+    private fun navigateToMap() {
+        currentEvent?.let { event ->
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("SELECTED_EVENT_ID", event.id)
+            intent.putExtra("SELECTED_EVENT_NAME", event.name)
+            intent.putExtra("SELECTED_EVENT_DESCRIPTION", event.description)
+            intent.putExtra("SELECTED_EVENT_LOCATION", event.location)
+            startActivity(intent)
+        }
+    }
+    
+    private fun saveEvent() {
+        // TODO: Implement event persistence in next step
+        Log.d("EventDetails", "Save event functionality to be implemented")
     }
 }
 
