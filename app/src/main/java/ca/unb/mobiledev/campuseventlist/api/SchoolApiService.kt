@@ -2,6 +2,7 @@ package ca.unb.mobiledev.campuseventlist.api
 
 import ca.unb.mobiledev.campuseventlist.models.EventResponse
 import ca.unb.mobiledev.campuseventlist.models.SchoolResponse
+import ca.unb.mobiledev.campuseventlist.models.SingleEventResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,8 +18,9 @@ interface SchoolApiService {
     @GET("v1/blog/events/school/{schoolId}")
     fun getEventsBySchool(@Path("schoolId") schoolId: String): Call<EventResponse>
 
-    // GET request to retrieve event details
+    // GET request to retrieve single event details (returns SingleEventResponse)
+    // API endpoint: /v1/blog/events/{eventId} returns {"data": {...}} format
     @GET("v1/blog/events/{eventId}")
-    fun getEventsById(@Path("eventId") eventId: String): Call<EventResponse>
+    fun getEventById(@Path("eventId") eventId: String): Call<SingleEventResponse>
 }
 
