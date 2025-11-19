@@ -12,10 +12,14 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.campuseventlist.adapters.EventListAdapter
+import ca.unb.mobiledev.campuseventlist.adapters.EventListItem
 import ca.unb.mobiledev.campuseventlist.api.RetrofitClient
 import ca.unb.mobiledev.campuseventlist.models.Event
 import ca.unb.mobiledev.campuseventlist.models.EventResponse
 import retrofit2.Call
+import java.text.SimpleDateFormat
+import java.util.*
 import retrofit2.Callback
 import retrofit2.Response
 
@@ -27,7 +31,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
     private lateinit var searchEventIcon: ImageView
     private lateinit var loadingEventsContainer: android.view.View
     private lateinit var backButton: ImageView
-    private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var adapter: EventListAdapter
     
     private val allEvents = mutableListOf<Event>()
     private val eventNames = mutableListOf<String>()
@@ -61,20 +65,19 @@ class UpcomingEventsActivity : AppCompatActivity() {
         // Display selected school name in label
         selectedSchoolLabel.text = selectedSchoolName
 
-        // Setup ListView adapter
-        adapter = ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_list_item_1
-        )
+        // Setup ListView adapter with empty list initially
+        adapter = EventListAdapter(emptyList())
         eventsListView.adapter = adapter
 
         Log.d("UpcomingEvents", "Adapter set to ListView")
 
         // Handle event selection from list
         eventsListView.setOnItemClickListener { _, _, position, _ ->
-            val selectedEvent = adapter.getItem(position)
-            Log.d("UpcomingEvents", "Event clicked: $selectedEvent")
-            selectedEvent?.let { validateEventAndNavigate(it) }
+            val item = adapter.getItem(position)
+            if (item is EventListItem.EventItem) {
+                Log.d("UpcomingEvents", "Event clicked: ${item.event.name}")
+                validateEventAndNavigate(item.event.name)
+            }
         }
 
         // Setup search functionality
@@ -82,7 +85,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                adapter.filter.filter(s)
+                filterEvents(s?.toString() ?: "")
             }
             
             override fun afterTextChanged(s: Editable?) {}
@@ -129,6 +132,98 @@ class UpcomingEventsActivity : AppCompatActivity() {
         Log.d("UpcomingEvents", "Loading indicator hidden")
     }
     
+    /**
+     * Parse date from eventDateTime or createdAt field
+     * Returns date in format "2025-10-12" or null if parsing fails
+     */
+    private fun parseEventDate(event: Event): String? {
+        // Try eventDateTime first (format: "2025-11-15T11:15:18.661510-04:00")
+        event.eventDateTime?.let {
+            try {
+                // Extract date part (before 'T')
+                val datePart = it.split('T')[0]
+                return datePart
+            } catch (e: Exception) {
+                Log.e("UpcomingEvents", "Error parsing eventDateTime: $it", e)
+            }
+        }
+        
+        // Fallback to createdAt (format: "2025-11-15")
+        event.createdAt?.let {
+            return it
+        }
+        
+        return null
+    }
+    
+    /**
+     * Sort events by date (ascending - earliest first) and group by date
+     */
+    private fun sortAndGroupEventsByDate(events: List<Event>): List<EventListItem> {
+        val items = mutableListOf<EventListItem>()
+        
+        // Sort events by date
+        val sortedEvents = events.sortedBy { event ->
+            parseEventDate(event) ?: "9999-12-31" // Put events without date at the end
+        }
+        
+        // Group events by date
+        var currentDate: String? = null
+        for (event in sortedEvents) {
+            val eventDate = parseEventDate(event) ?: continue // Skip events without date
+            
+            // Add date header if this is a new date
+            if (eventDate != currentDate) {
+                currentDate = eventDate
+                items.add(EventListItem.DateHeader(eventDate))
+            }
+            
+            // Add event item
+            items.add(EventListItem.EventItem(event))
+        }
+        
+        return items
+    }
+    
+    /**
+     * Filter events by search query and update adapter
+     */
+    private fun filterEvents(query: String) {
+        if (query.isEmpty()) {
+            // Show all events grouped by date
+            val items = sortAndGroupEventsByDate(allEvents)
+            adapter = EventListAdapter(items)
+            eventsListView.adapter = adapter
+            return
+        }
+        
+        // Filter events that match the query
+        val filteredEvents = allEvents.filter { event ->
+            event.name.contains(query, ignoreCase = true) ||
+            event.description.contains(query, ignoreCase = true)
+        }
+        
+        // Group filtered events by date
+        val items = sortAndGroupEventsByDate(filteredEvents)
+        adapter = EventListAdapter(items)
+        eventsListView.adapter = adapter
+    }
+    
+    /**
+     * Update adapter with events grouped by date
+     */
+    private fun updateAdapterWithEvents() {
+        val items = sortAndGroupEventsByDate(allEvents)
+        adapter = EventListAdapter(items)
+        eventsListView.adapter = adapter
+        
+        // Update event names for search validation
+        eventNames.clear()
+        eventNames.addAll(allEvents.map { it.name })
+        
+        Log.d("UpcomingEvents", "Adapter updated with ${items.size} items (${allEvents.size} events)")
+    }
+    
     // Fetch events from API for selected school
     private fun fetchEvents() {
         if (selectedSchoolId.isEmpty()) {
@@ -152,7 +247,8 @@ class UpcomingEventsActivity : AppCompatActivity() {
                             runOnUiThread {
                                 allEvents.clear()
                                 eventNames.clear()
-                                adapter.clear()
+                                adapter = EventListAdapter(emptyList())
+                                eventsListView.adapter = adapter
                                 isDataLoaded = true
                                 hideLoading()
                                 Toast.makeText(
@@ -167,19 +263,14 @@ class UpcomingEventsActivity : AppCompatActivity() {
                         allEvents.clear()
                         allEvents.addAll(eventResponse.data)
                         
-                        val newEventNames = allEvents.map { it.name }
-                        Log.d("UpcomingEvents", "Event names to add: $newEventNames")
+                        Log.d("UpcomingEvents", "Events received: ${allEvents.size}")
                         
                         // Update adapter on UI thread
                         runOnUiThread {
                             try {
-                                Log.d("UpcomingEvents", "Updating adapter with ${newEventNames.size} events")
+                                Log.d("UpcomingEvents", "Updating adapter with ${allEvents.size} events")
                                 
-                                adapter.clear()
-                                adapter.addAll(newEventNames)
-                                
-                                eventNames.clear()
-                                eventNames.addAll(newEventNames)
+                                updateAdapterWithEvents()
                                 
                                 isDataLoaded = true
                                 hideLoading()
@@ -188,7 +279,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
                                 
                                 Toast.makeText(
                                     this@UpcomingEventsActivity,
-                                    "Loaded ${adapter.count} event(s)",
+                                    "Loaded ${allEvents.size} event(s)",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } catch (e: Exception) {
@@ -266,13 +357,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
         allEvents.clear()
         allEvents.addAll(listOf(event1, event2))
         
-        val newEventNames = allEvents.map { it.name }
-        
-        adapter.clear()
-        adapter.addAll(newEventNames)
-        
-        eventNames.clear()
-        eventNames.addAll(newEventNames)
+        updateAdapterWithEvents()
         
         isDataLoaded = true
         hideLoading()
@@ -304,7 +389,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
         
         // Clear search bar and filter when returning from EventErrorActivity
         searchEventEditText.setText("")
-        adapter.filter.filter("") // Clear any active filter
+        filterEvents("") // Clear any active filter
         Log.d("UpcomingEvents", "Search bar and filter cleared")
         
         // Ensure loading indicator is hidden
