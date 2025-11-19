@@ -137,8 +137,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             .enqueue(object : Callback<EventResponse> {
                 override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                     if (response.isSuccessful && response.body() != null) {
-                        val event = response.body()!!.data
-                        eventLocation = parsePointString(event.location)
+                        val events = response.body()!!.data
+                        if (events.isNotEmpty()) {
+                            val event = events[0]
+                            eventLocation = parsePointString(event.location)
+                        }
                         openMap()
                     } else {
                         showToast("Failed to fetch event data")
