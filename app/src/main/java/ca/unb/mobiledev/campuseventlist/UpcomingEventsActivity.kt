@@ -104,7 +104,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
         // Handle back button click
         backButton.setOnClickListener {
             Log.d("UpcomingEvents", "Back button clicked")
-            finish() // Return to SelectSchoolActivity
+            navigateToSelectSchool()
         }
 
         Log.d("UpcomingEvents", "Setup complete")
@@ -363,9 +363,15 @@ class UpcomingEventsActivity : AppCompatActivity() {
     }
     
     override fun onBackPressed() {
-        // Handle back button press
+        // Handle back button press - navigate to SelectSchoolActivity
         Log.d("UpcomingEvents", "Back button pressed - returning to SelectSchoolActivity")
-        super.onBackPressed()
+        navigateToSelectSchool()
+    }
+    
+    private fun navigateToSelectSchool() {
+        val intent = Intent(this, SelectSchoolActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
 
