@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import ca.unb.mobiledev.campuseventlist.api.RetrofitClient
 import ca.unb.mobiledev.campuseventlist.models.School
 import ca.unb.mobiledev.campuseventlist.models.SchoolResponse
+import ca.unb.mobiledev.campuseventlist.utils.PreferencesManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -291,8 +292,16 @@ class SelectSchoolActivity : AppCompatActivity() {
         }
 
         if (selectedSchool != null) {
-            // School exists - navigate to UpcomingEventsActivity
+            // School exists - save it and navigate to UpcomingEventsActivity
             Log.d("SelectSchool", "School found! ID: ${selectedSchool.id}, Name: ${selectedSchool.name}")
+            
+            // Save the selected school for persistence
+            PreferencesManager.getInstance(this).saveSelectedSchool(
+                selectedSchool.id,
+                selectedSchool.name
+            )
+            Log.d("SelectSchool", "School saved to preferences")
+            
             val intent = Intent(this, UpcomingEventsActivity::class.java)
             intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchool.name)
             intent.putExtra("SELECTED_SCHOOL_ID", selectedSchool.id)
