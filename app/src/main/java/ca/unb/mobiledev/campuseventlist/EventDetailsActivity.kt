@@ -146,14 +146,23 @@ class EventDetailsActivity : AppCompatActivity() {
     }
     
     private fun navigateToMap() {
+        if (eventId.isEmpty()) {
+            Log.e("EventDetails", "Cannot navigate to map: eventId is empty")
+            return
+        }
+        
+        val intent = Intent(this, MapActivity::class.java)
+        intent.putExtra("SELECTED_EVENT_ID", eventId)
+        
+        // Include additional event data if available
         currentEvent?.let { event ->
-            val intent = Intent(this, MapActivity::class.java)
-            intent.putExtra("SELECTED_EVENT_ID", event.id)
             intent.putExtra("SELECTED_EVENT_NAME", event.name)
             intent.putExtra("SELECTED_EVENT_DESCRIPTION", event.description)
             intent.putExtra("SELECTED_EVENT_LOCATION", event.location)
-            startActivity(intent)
         }
+        
+        Log.d("EventDetails", "Navigating to MapActivity with eventId: $eventId")
+        startActivity(intent)
     }
 }
 
