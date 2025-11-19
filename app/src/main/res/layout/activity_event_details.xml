@@ -81,10 +81,9 @@
         <ScrollView
             android:id="@+id/descriptionScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="350dp"
             android:layout_below="@id/descriptionTitle"
             android:layout_marginTop="8dp"
-            android:maxHeight="200dp"
             android:background="@drawable/school_name_label_background"
             android:padding="16dp">
 
