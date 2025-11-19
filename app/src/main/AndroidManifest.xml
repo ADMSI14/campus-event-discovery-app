@@ -61,7 +61,7 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".MapActivity"
             android:exported="false">
         </activity>
     </application>

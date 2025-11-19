@@ -342,9 +342,9 @@ class UpcomingEventsActivity : AppCompatActivity() {
         }
 
         if (selectedEvent != null) {
-            // Event exists - navigate to MainActivity
+            // Event exists - navigate to MapActivity
             Log.d("UpcomingEvents", "Event found! ID: ${selectedEvent.id}, Name: ${selectedEvent.name}")
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MapActivity::class.java)
             intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchoolName)
             intent.putExtra("SELECTED_SCHOOL_ID", selectedSchoolId)
             intent.putExtra("SELECTED_EVENT_ID", selectedEvent.id)
