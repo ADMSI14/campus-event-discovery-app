@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- Title: "Event Details" -->
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="40dp"
+            android:text="Event Details"
+            android:textSize="32sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <!-- Event Name Container -->
+        <TextView
+            android:id="@+id/eventNameLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleText"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/school_name_label_background"
+            android:padding="16dp"
+            android:text="Event Name"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+        <!-- Date and Location Container -->
+        <LinearLayout
+            android:id="@+id/dateLocationContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eventNameLabel"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/school_name_label_background"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/eventDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date: 2025-10-12"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/eventLocationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Location: Student Union Building"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <!-- Description Subtitle -->
+        <TextView
+            android:id="@+id/descriptionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateLocationContainer"
+            android:layout_marginTop="24dp"
+            android:text="Description"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <!-- Description Scrollable Container -->
+        <ScrollView
+            android:id="@+id/descriptionScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/descriptionTitle"
+            android:layout_marginTop="8dp"
+            android:maxHeight="200dp"
+            android:background="@drawable/school_name_label_background"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/eventDescriptionLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Event description will appear here..."
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </ScrollView>
+
+        <!-- View on Map Button -->
+        <Button
+            android:id="@+id/viewOnMapButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/descriptionScrollView"
+            android:layout_marginTop="24dp"
+            android:text="View On Map"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:backgroundTint="#FFA500" />
+
+        <!-- Save Event Button -->
+        <Button
+            android:id="@+id/saveEventButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewOnMapButton"
+            android:layout_marginTop="16dp"
+            android:text="Save Event"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:backgroundTint="#90EE90" />
+
+        <!-- Back Button (Bottom Left) -->
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:contentDescription="@string/back_button_desc"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/back_button_background"
+            android:padding="12dp"
+            app:tint="#FFFFFF" />
+
+    </RelativeLayout>
+</ScrollView>
+
