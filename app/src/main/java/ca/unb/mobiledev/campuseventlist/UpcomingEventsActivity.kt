@@ -427,17 +427,12 @@ class UpcomingEventsActivity : AppCompatActivity() {
         }
 
         if (selectedEvent != null) {
-            // Event exists - navigate to MapActivity
+            // Event exists - navigate to EventDetailsActivity
             Log.d("UpcomingEvents", "Event found! ID: ${selectedEvent.id}, Name: ${selectedEvent.name}")
-            val intent = Intent(this, MapActivity::class.java)
-            intent.putExtra("SELECTED_SCHOOL_NAME", selectedSchoolName)
-            intent.putExtra("SELECTED_SCHOOL_ID", selectedSchoolId)
+            val intent = Intent(this, EventDetailsActivity::class.java)
             intent.putExtra("SELECTED_EVENT_ID", selectedEvent.id)
-            intent.putExtra("SELECTED_EVENT_NAME", selectedEvent.name)
-            intent.putExtra("SELECTED_EVENT_DESCRIPTION", selectedEvent.description)
-            intent.putExtra("SELECTED_EVENT_LOCATION", selectedEvent.location)
             startActivity(intent)
-            finish()
+            // Don't finish - keep UpcomingEventsActivity in back stack
         } else {
             // Event doesn't exist - navigate to EventErrorActivity
             Log.d("UpcomingEvents", "Event not found! Navigating to EventErrorActivity")

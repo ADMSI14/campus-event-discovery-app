@@ -109,18 +109,6 @@
             android:padding="16dp"
             android:backgroundTint="#FFA500" />
 
-        <!-- Save Event Button -->
-        <Button
-            android:id="@+id/saveEventButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/viewOnMapButton"
-            android:layout_marginTop="16dp"
-            android:text="Save Event"
-            android:textSize="16sp"
-            android:padding="16dp"
-            android:backgroundTint="#90EE90" />
-
         <!-- Back Button (Bottom Left) -->
         <ImageView
             android:id="@+id/backButton"

@@ -64,6 +64,10 @@
             android:name=".MapActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".EventDetailsActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

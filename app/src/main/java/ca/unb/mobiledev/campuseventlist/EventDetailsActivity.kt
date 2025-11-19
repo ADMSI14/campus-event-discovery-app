@@ -21,7 +21,6 @@ class EventDetailsActivity : AppCompatActivity() {
     private lateinit var eventLocationLabel: TextView
     private lateinit var eventDescriptionLabel: TextView
     private lateinit var viewOnMapButton: Button
-    private lateinit var saveEventButton: Button
     private lateinit var backButton: ImageView
     
     private var eventId: String = ""
@@ -51,7 +50,6 @@ class EventDetailsActivity : AppCompatActivity() {
         eventLocationLabel = findViewById(R.id.eventLocationLabel)
         eventDescriptionLabel = findViewById(R.id.eventDescriptionLabel)
         viewOnMapButton = findViewById(R.id.viewOnMapButton)
-        saveEventButton = findViewById(R.id.saveEventButton)
         backButton = findViewById(R.id.backButton)
     }
     
@@ -64,11 +62,6 @@ class EventDetailsActivity : AppCompatActivity() {
         viewOnMapButton.setOnClickListener {
             Log.d("EventDetails", "View on Map button clicked")
             navigateToMap()
-        }
-        
-        saveEventButton.setOnClickListener {
-            Log.d("EventDetails", "Save Event button clicked")
-            saveEvent()
         }
     }
     
@@ -149,11 +142,6 @@ class EventDetailsActivity : AppCompatActivity() {
             intent.putExtra("SELECTED_EVENT_LOCATION", event.location)
             startActivity(intent)
         }
-    }
-    
-    private fun saveEvent() {
-        // TODO: Implement event persistence in next step
-        Log.d("EventDetails", "Save event functionality to be implemented")
     }
 }
 
