@@ -71,14 +71,23 @@ class EventDetailsActivity : AppCompatActivity() {
             return
         }
         
+        Log.d("EventDetails", "Fetching event details for ID: $eventId")
+        
         RetrofitClient.apiService.getEventById(eventId).enqueue(object : Callback<SingleEventResponse> {
             override fun onResponse(
                 call: Call<SingleEventResponse>,
                 response: Response<SingleEventResponse>
             ) {
                 if (response.isSuccessful && response.body() != null) {
-                    currentEvent = response.body()!!.data
-                    displayEventDetails(currentEvent!!)
+                    val event = response.body()!!.data
+                    currentEvent = event
+                    Log.d("EventDetails", "Event fetched successfully: ${event.name}")
+                    Log.d("EventDetails", "Event description: ${event.description}")
+                    
+                    // Update UI on main thread
+                    runOnUiThread {
+                        displayEventDetails(event)
+                    }
                 } else {
                     Log.e("EventDetails", "Failed to fetch event: ${response.code()}")
                 }
@@ -91,7 +100,9 @@ class EventDetailsActivity : AppCompatActivity() {
     }
     
     private fun displayEventDetails(event: Event) {
+        // Display event name from API
         eventNameLabel.text = event.name
+        Log.d("EventDetails", "Setting event name: ${event.name}")
         
         // Parse and display date
         val date = parseEventDate(event)
@@ -100,8 +111,9 @@ class EventDetailsActivity : AppCompatActivity() {
         // Display location
         eventLocationLabel.text = "Location: ${formatLocation(event.location)}"
         
-        // Display description
+        // Display description from API
         eventDescriptionLabel.text = event.description
+        Log.d("EventDetails", "Setting event description: ${event.description}")
     }
     
     private fun parseEventDate(event: Event): String {
