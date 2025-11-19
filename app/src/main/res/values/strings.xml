@@ -26,6 +26,10 @@
     <string name="error_explanation">Click below to send an automatic email to your schools administration, requesting them to join Uni-T !</string>
     <string name="send_request_button">Send Request for Enrolment</string>
     <string name="return_to_selection">Return to the School Selection Screen</string>
+    
+    <!-- Event Error Screen Strings -->
+    <string name="selected_event_text">Your selected event:</string>
+    <string name="event_not_available_text">is not available in Uni-T</string>
 
     <!-- Map Screen Strings -->
     <string name="google_maps_key"></string>
