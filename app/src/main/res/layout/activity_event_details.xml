@@ -19,7 +19,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="40dp"
             android:text="Event Details"
-            android:textSize="32sp"
+            android:textSize="40sp"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
