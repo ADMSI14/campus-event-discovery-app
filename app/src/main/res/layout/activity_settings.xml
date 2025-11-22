@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/settingsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:text="Settings"
+        android:textColor="@android:color/black"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <!-- Current School Display -->
+    <TextView
+        android:id="@+id/currentSchoolText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settingsTitle"
+        android:layout_marginTop="32dp"
+        android:text="Current school: Loading..."
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <!-- Change School Button -->
+    <Button
+        android:id="@+id/changeSchoolButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentSchoolText"
+        android:layout_marginTop="24dp"
+        android:padding="12dp"
+        android:text="Change School"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp"
+        android:src="@android:drawable/ic_menu_revert"
+        android:contentDescription="@string/back_button_desc"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/back_button_background"
+        android:padding="12dp"
+        app:tint="#FFFFFF" />
+
+</RelativeLayout>

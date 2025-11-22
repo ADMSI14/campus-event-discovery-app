@@ -7,6 +7,21 @@
     android:padding="24dp">
 
     <!-- Title: "Upcoming Events" -->
+
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Settings"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/settings_gear" />
+
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"

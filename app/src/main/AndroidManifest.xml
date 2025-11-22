@@ -68,6 +68,10 @@
             android:name=".EventDetailsActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

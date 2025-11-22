@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
@@ -43,7 +44,7 @@ class UpcomingEventsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upcoming_events)
-
+        val settingsButton: ImageButton = findViewById(R.id.settingsButton)
         Log.d("UpcomingEvents", "onCreate started")
 
         // Get selected school data from intent
@@ -70,6 +71,11 @@ class UpcomingEventsActivity : AppCompatActivity() {
         eventsListView.adapter = adapter
 
         Log.d("UpcomingEvents", "Adapter set to ListView")
+
+        settingsButton.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
 
         // Handle event selection from list
         eventsListView.setOnItemClickListener { _, _, position, _ ->
