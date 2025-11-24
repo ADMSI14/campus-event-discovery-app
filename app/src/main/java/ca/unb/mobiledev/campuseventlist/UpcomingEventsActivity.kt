@@ -31,7 +31,6 @@ class UpcomingEventsActivity : AppCompatActivity() {
     private lateinit var searchEventEditText: EditText
     private lateinit var searchEventIcon: ImageView
     private lateinit var loadingEventsContainer: android.view.View
-    private lateinit var backButton: ImageView
     private lateinit var adapter: EventListAdapter
     
     private val allEvents = mutableListOf<Event>()
@@ -59,7 +58,6 @@ class UpcomingEventsActivity : AppCompatActivity() {
         searchEventEditText = findViewById(R.id.searchEventEditText)
         searchEventIcon = findViewById(R.id.searchEventIcon)
         loadingEventsContainer = findViewById(R.id.loadingEventsContainer)
-        backButton = findViewById(R.id.backButton)
 
         Log.d("UpcomingEvents", "Views initialized")
 
@@ -107,12 +105,6 @@ class UpcomingEventsActivity : AppCompatActivity() {
         searchEventIcon.setOnClickListener {
             Log.d("UpcomingEvents", "Search icon clicked")
             performEventSearch()
-        }
-        
-        // Handle back button click
-        backButton.setOnClickListener {
-            Log.d("UpcomingEvents", "Back button clicked")
-            navigateToSelectSchool()
         }
 
         Log.d("UpcomingEvents", "Setup complete")
@@ -448,17 +440,6 @@ class UpcomingEventsActivity : AppCompatActivity() {
             // Don't finish - keep UpcomingEventsActivity in back stack
         }
     }
-    
-    override fun onBackPressed() {
-        // Handle back button press - navigate to SelectSchoolActivity
-        Log.d("UpcomingEvents", "Back button pressed - returning to SelectSchoolActivity")
-        navigateToSelectSchool()
-    }
-    
-    private fun navigateToSelectSchool() {
-        val intent = Intent(this, SelectSchoolActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+
 }
 

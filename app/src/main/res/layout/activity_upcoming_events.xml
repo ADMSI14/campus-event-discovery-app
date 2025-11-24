@@ -170,6 +170,7 @@
         android:layout_marginBottom="20dp"
         android:src="@android:drawable/ic_menu_revert"
         android:contentDescription="@string/back_button_desc"
+        android:visibility="invisible"
         android:clickable="true"
         android:focusable="true"
         android:background="@drawable/back_button_background"

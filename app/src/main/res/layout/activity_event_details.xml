@@ -115,8 +115,9 @@
             android:id="@+id/backButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/viewOnMapButton"
             android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:src="@android:drawable/ic_menu_revert"
             android:contentDescription="@string/back_button_desc"
@@ -125,6 +126,7 @@
             android:background="@drawable/back_button_background"
             android:padding="12dp"
             app:tint="#FFFFFF" />
+
 
     </RelativeLayout>
 </ScrollView>
