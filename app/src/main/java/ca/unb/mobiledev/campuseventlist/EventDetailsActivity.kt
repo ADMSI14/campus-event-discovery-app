@@ -20,6 +20,7 @@ class EventDetailsActivity : AppCompatActivity() {
     private lateinit var eventNameLabel: TextView
     private lateinit var eventDateLabel: TextView
     private lateinit var eventLocationLabel: TextView
+    private lateinit var eventTimeLabel: TextView
     private lateinit var eventDescriptionLabel: TextView
     private lateinit var viewOnMapButton: Button
     private lateinit var backButton: ImageView
@@ -50,6 +51,7 @@ class EventDetailsActivity : AppCompatActivity() {
     private fun initializeViews() {
         eventNameLabel = findViewById(R.id.eventNameLabel)
         eventDateLabel = findViewById(R.id.eventDateLabel)
+        eventTimeLabel = findViewById(R.id.eventTimeLabel)
         eventLocationLabel = findViewById(R.id.eventLocationLabel)
         eventDescriptionLabel = findViewById(R.id.eventDescriptionLabel)
         viewOnMapButton = findViewById(R.id.viewOnMapButton)
@@ -110,6 +112,9 @@ class EventDetailsActivity : AppCompatActivity() {
         // Parse and display date
         val date = parseEventDate(event)
         eventDateLabel.text = "Date: $date"
+
+        val time = parseEventTime(event)
+        eventTimeLabel.text = "Time: $time"
         
         // Display location
         eventLocationLabel.text = "Location: ${formatLocation(event.location)}"
@@ -146,6 +151,26 @@ class EventDetailsActivity : AppCompatActivity() {
         } else {
             location
         }
+    }
+
+    private fun parseEventTime(event: Event): String{
+        event.eventDateTime?.let{
+            try {
+                val timePart = it.split('T')[1].substring(0, 5)
+                val hour = timePart.split(':')[0].toInt()
+                val minute = timePart.split(':')[1]
+                return when {
+                    hour == 0 -> "12:$minute AM"
+                    hour == 12 -> "12:$minute PM"
+                    hour > 12 -> "${hour - 12}:$minute PM"
+                    else -> "$hour:$minute AM"
+                }
+            }
+            catch (e: Exception){
+                android.util.Log.e("EventDetails", "Error parsing eventDateTime: $it", e)
+            }
+        }
+        return "Time not available"
     }
     
     private fun navigateToMap() {

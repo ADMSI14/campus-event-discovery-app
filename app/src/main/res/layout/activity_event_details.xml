@@ -38,7 +38,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black" />
 
-        <!-- Date and Location Container -->
+        <!-- Date, Time and Location Container -->
         <LinearLayout
             android:id="@+id/dateLocationContainer"
             android:layout_width="match_parent"
@@ -55,16 +55,26 @@
                 android:layout_height="wrap_content"
                 android:text="Date: 2025-10-12"
                 android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/eventTimeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time: Loading..."
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/eventLocationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="Location: Student Union Building"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
+
         </LinearLayout>
 
         <!-- Description Subtitle -->
