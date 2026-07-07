@@ -32,7 +32,7 @@
     <string name="event_not_available_text">is not available in Uni-T</string>
 
     <!-- Map Screen Strings -->
-    <string name="google_maps_key"></string>
+    <string name="google_maps_key">YOUR_GOOGLE_MAPS_API_KEY</string>
     <string name="permission_denied">Location Permissions Denied</string>
     <string name="fetch_location_error">Unable to fetch the location</string>
 </resources>
